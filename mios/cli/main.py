@@ -1,9 +1,10 @@
 import typer
 from rich import print
 from mios.debug.error_parser import parse_error
+from mios.core.planner import plan_from_error
+from mios.core.executor import run_action
 
 app = typer.Typer()
-
 
 @app.command()
 def debug():
@@ -19,18 +20,16 @@ def debug():
     print("\n[green]Analysis:[/green]")
     print(analysis)
 
+    plan = plan_from_error(error)
 
-@app.command()
-def doctor():
-    """
-    Show system health
-    """
-    print("[cyan]System diagnostic coming soon...[/cyan]")
+    print("\n[green]Action Plan:[/green]")
+    print(plan)
 
+    if typer.confirm("Run action?"):
+        run_action(plan)
 
 def main():
     app()
-
 
 if __name__ == "__main__":
     main()
