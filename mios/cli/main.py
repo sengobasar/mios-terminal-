@@ -2,6 +2,7 @@ import typer
 from rich import print
 from mios.tools.system_info import get_system_info
 import json
+from mios.debug.error_parser import parse_error, plan_from_error
 
 app = typer.Typer()
 
@@ -10,7 +11,16 @@ def debug():
     """
     Run error debugging pipeline
     """
-    pass
+
+    error = input("Paste the error: ")
+    analysis = parse_error(error)
+    print(f"\n[yellow]Analysis:[/yellow]\n{json.dumps(analysis, indent=4)}")
+    print(f"\n[yellow]Action Plan:[/yellow]\n{json.dumps(plan_from_error(error), indent=4)}")
+    confirmation = input("Confirm to run the action plan? (y/n): ")
+    if confirmation.lower() == "y":
+        plan = plan_from_error(error)
+        if plan["action"] != "none":
+            run_action(plan)
 
 @app.command()
 def doctor():
