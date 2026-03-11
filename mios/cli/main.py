@@ -2,8 +2,10 @@ import typer
 from rich import print
 from mios.tools.system_info import get_system_info
 import json
-from mios.debug.error_parser import parse_error, plan_from_error
+from mios.debug.error_parser import parse_error
+from mios.core.planner import plan_from_error
 from mios.core.executor import run_action
+
 
 app = typer.Typer()
 
