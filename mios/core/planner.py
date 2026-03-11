@@ -14,6 +14,24 @@ def plan_from_error(error):
             "package": analysis["package"]
         }
 
+    elif analysis["type"] == "missing_command":
+        return {
+            "action": "suggest_install_command",
+            "command": analysis["command"]
+        }
+
+    elif analysis["type"] == "permission_error":
+        return {
+            "action": "suggest_run_with_sudo",
+            "command": analysis["command"]
+        }
+
+    elif analysis["type"] == "missing_file":
+        return {
+            "action": "suggest_check_file_path",
+            "file": analysis["file"]
+        }
+
     return {
         "action": "none"
     }
