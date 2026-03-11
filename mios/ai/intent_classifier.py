@@ -27,24 +27,29 @@ def main():
     intent  = classify_intent(command)
 
     # Print the intent
-    print(f"The intent is: 
-    {intent}")
+    print(f"The intent is: {intent}")
 
     # Run the action
     run_action(system_info, command, intent)
 
-def classify_intent(text):
+def classify_intent(text: str):
     """
-    Detects the intent of the command
+    Detect the intent of a user command.
     """
-    # Vectorize the text
-    vectorizer  = CountVectorizer()
-    X  = vectorizer.fit_transform(text)
 
-    # Predict the intent
-    y_pred  = model.predict(X)
+    text = text.lower()
 
-    # Return the intent
-    return y_pred[0]
+    # compress folder intent
+    if "compress" in text or "zip" in text or "archive" in text:
+        return {"intent": "compress_folder"}
 
-if 
+    # find large files intent
+    if "find large files" in text or "files larger than" in text or "large files" in text:
+        return {"intent": "find_large_files"}
+
+    # explain command intent
+    if text.startswith("explain") or "explain command" in text:
+        return {"intent": "explain_command"}
+
+    # default
+    return {"intent": "unknown"}
