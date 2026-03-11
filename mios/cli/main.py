@@ -1,32 +1,19 @@
 import typer
 from rich import print
-from mios.debug.error_parser import parse_error
-from mios.core.planner import plan_from_error
-from mios.core.executor import run_action
+from mios.tools.system_info import get_system_info
 
 app = typer.Typer()
 
 @app.command()
-def debug():
+def doctor():
     """
-    Debug terminal errors
+    Check system health
     """
 
-    print("[yellow]Paste your error below:[/yellow]")
-    error = input("> ")
+    system_info = get_system_info()
 
-    analysis = parse_error(error)
-
-    print("\n[green]Analysis:[/green]")
-    print(analysis)
-
-    plan = plan_from_error(error)
-
-    print("\n[green]Action Plan:[/green]")
-    print(plan)
-
-    if typer.confirm("Run action?"):
-        run_action(plan)
+    print("\n[green]System Information:[/green]")
+    print(json.dumps(system_info, indent=4))
 
 def main():
     app()
