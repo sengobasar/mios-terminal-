@@ -22,8 +22,7 @@ def plan_from_error(error):
 
     elif analysis["type"] == "permission_error":
         return {
-            "action": "suggest_run_with_sudo",
-            "command": analysis["command"]
+            "action": "suggest_run_with_sudo"
         }
 
     elif analysis["type"] == "missing_file":
