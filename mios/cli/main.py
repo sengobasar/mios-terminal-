@@ -1,6 +1,7 @@
 import typer
 from rich import print
 from mios.tools.system_info import get_system_info
+import json
 
 app = typer.Typer()
 
