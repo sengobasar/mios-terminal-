@@ -1,6 +1,5 @@
 import re
 
-
 def parse_error(error_text: str):
     """
     Parse terminal errors and return structured diagnosis.
@@ -49,6 +48,16 @@ def parse_error(error_text: str):
 
         return {
             "type": "permission_error"
+        }
+
+    # -------------------------------
+    # No such file or directory
+    # -------------------------------
+    if "No such file or directory" in error_text:
+
+        return {
+            "type": "missing_file",
+            "file": error_text.split(":")[-1].strip()
         }
 
     # -------------------------------
