@@ -6,6 +6,13 @@ import json
 app = typer.Typer()
 
 @app.command()
+def debug():
+    """
+    Run error debugging pipeline
+    """
+    pass
+
+@app.command()
 def doctor():
     """
     Check system health
