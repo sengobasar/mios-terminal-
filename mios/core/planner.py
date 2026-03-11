@@ -1,4 +1,5 @@
 import json
+from mios.debug.error_parser import parse_error
 
 def plan_from_error(error):
     """
