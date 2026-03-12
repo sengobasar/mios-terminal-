@@ -1,3 +1,4 @@
+import json
 from mios.core.agent_planner import generate_plan
 from mios.core.tool_registry import get_tools
 
