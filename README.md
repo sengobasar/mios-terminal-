@@ -46,7 +46,7 @@ MIOS (Machine Intelligence Operating System) is an **AI-powered terminal copilot
 
 ```bash
 # Install MIOS (future PyPI release)
-pip install mios
+pip install git+https://github.com/sengobasar/mios-terminal-.git
 
 # Or install from source
 git clone https://github.com/yourusername/mios.git
