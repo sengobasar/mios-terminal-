@@ -1,10 +1,12 @@
 import typer
 import re
+import json
+from pathlib import Path
+from typing import Optional
 from rich import print
 from rich.prompt import Prompt
 from mios.tools.system_info import get_system_info
-import json
-
+from mios.core.session import Session
 from mios.debug.error_parser import parse_error
 from mios.core.planner import plan_from_error
 from mios.core.executor import run_action
@@ -16,13 +18,20 @@ from mios.core.agent_loop import run_agent
 
 app = typer.Typer()
 
-def interactive_shell():
-    """Start interactive MIOS shell."""
+def interactive_shell(project_path: Optional[str] = None):
+    """Start interactive MIOS shell with optional project context."""
+    session = Session()
+    if project_path:
+        session.scan_project(project_path)
+    
     print("\n[bold green]MIOS Interactive Shell[/bold green]")
+    if session.project_files:
+        print(f"[dim]Project: {project_path}[/dim]")
     print("Type 'exit' to quit\n")
     
     while True:
-        user_input = Prompt.ask("mios>")
+        prompt = f"mios ({session.current_file or 'no file'})>" if session.current_file else "mios>"
+        user_input = Prompt.ask(prompt)
         
         if user_input.lower() in ('exit', 'quit'):
             break
@@ -73,9 +82,9 @@ def interactive_shell():
 
 
 @app.command()
-def mios():
-    """Start MIOS interactive shell."""
-    interactive_shell()
+def mios(project: Optional[str] = typer.Argument(None)):
+    """Start MIOS interactive shell with optional project path."""
+    interactive_shell(project_path=project)
 
 @app.command()
 def debug():
@@ -155,3 +164,28 @@ def main():
 
 if __name__ == "__main__":
     main()
+@app.command()
+def edit(file_path: str):
+    """Open a file for editing with MIOS."""
+    session = Session()
+    session.update_file_context(file_path)
+    print(f"[green]Editing:[/green] {file_path}")
+    
+    # Implement actual editing logic here
+    content = Path(file_path).read_text()
+    print(f"\nFile content:\n{content}")
+
+@app.command()
+def new(file_path: str):
+    """Create a new file with MIOS assistance."""
+    Path(file_path).touch()
+    print(f"[green]Created:[/green] {file_path}")
+    edit(file_path)
+
+@app.command()
+def project(init_path: str = "."):
+    """Initialize or work with a MIOS project."""
+    session = Session()
+    session.scan_project(init_path)
+    print(f"[green]Project initialized:[/green] {init_path}")
+    print(f"Found {len(session.project_files)} files")
