@@ -86,6 +86,29 @@ def interactive_shell(project_path: Optional[str] = None):
             # Otherwise use normal intent system
             action = interpret_intent(intent, user_input)
 
+            # If interpreter cannot handle the intent - fallback to LLM
+            if "error" in action:
+                print("[yellow]Using LLM interpreter...[/yellow]")
+
+                action = interpret_with_llm(user_input)
+
+                if action["action"] == "create_file":
+                    with open(action["file"], "w", encoding="utf-8") as f:
+                        f.write(action.get("content", ""))
+                    print(f"[green]File created:[/green] {action['file']}")
+
+                elif action["action"] == "install_package":
+                    import subprocess
+                    subprocess.run(["pip", "install", action["package"]])
+                    print(f"[green]Package installed:[/green] {action['package']}")
+
+                elif action["action"] == "run_command":
+                    import subprocess
+                    subprocess.run(action["command"], shell=True)
+                    print(f"[green]Command executed:[/green] {action['command']}")
+
+                continue
+
             if "command" in action or "action" in action:
                 print(f"[blue]Executing: {action.get('command', action.get('action'))}[/blue]")
                 run_action(action)
