@@ -41,7 +41,23 @@ def interactive_shell():
             if intent_data["intent"] == "unknown":
                 print("[yellow]Using LLM interpreter...[/yellow]")
                 action = interpret_with_llm(user_input)
-                print(action)
+                
+                # Execute LLM actions automatically
+                if action["action"] == "create_file":
+                    with open(action["file"], "w", encoding="utf-8") as f:
+                        f.write(action.get("content", ""))
+                    print(f"[green]File created:[/green] {action['file']}")
+                
+                elif action["action"] == "install_package":
+                    import subprocess
+                    subprocess.run(["pip", "install", action["package"]])
+                    print(f"[green]Package installed:[/green] {action['package']}")
+                
+                elif action["action"] == "run_command":
+                    import subprocess
+                    subprocess.run(action["command"], shell=True)
+                    print(f"[green]Command executed:[/green] {action['command']}")
+                
                 continue
                 
             action = interpret_intent(intent_data["intent"], user_input)
