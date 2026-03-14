@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mios"
+version = "0.1.0"
+description = "AI terminal copilot"
+authors = [{name="Sengo"}]
+
+dependencies = [
+    "typer",
+    "rich",
+    "psutil",
+    "ollama"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mios*"]
+
+[project.scripts]
+mios = "mios.cli.main:main"

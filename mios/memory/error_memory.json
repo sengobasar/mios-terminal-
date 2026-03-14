@@ -1,0 +1,3 @@
+{
+  "ModuleNotFoundError:numpy": "pip install numpy"
+}

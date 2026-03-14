@@ -66,7 +66,9 @@ def interactive_shell(project_path: Optional[str] = None):
 
                 action = interpret_with_llm(user_input)
 
-                if action["action"] == "create_file":
+                if action.get("action") == "unknown":
+                    print("[red]Unknown action from LLM[/red]")
+                elif action["action"] == "create_file":
                     with open(action["file"], "w", encoding="utf-8") as f:
                         f.write(action.get("content", ""))
                     print(f"[green]File created:[/green] {action['file']}")
@@ -80,6 +82,23 @@ def interactive_shell(project_path: Optional[str] = None):
                     import subprocess
                     subprocess.run(action["command"], shell=True)
                     print(f"[green]Command executed:[/green] {action['command']}")
+
+                elif action["action"] == "read_file":
+                    try:
+                        content = Path(action["file"]).read_text(encoding="utf-8")
+                        print(f"\n[cyan]--- {action['file']} ---[/cyan]\n{content}\n")
+                    except Exception as e:
+                        print(f"[red]Error reading file:[/red] {e}")
+
+                elif action["action"] == "modify_file":
+                    try:
+                        Path(action["file"]).write_text(action.get("content", ""), encoding="utf-8")
+                        print(f"[green]File modified:[/green] {action['file']}")
+                    except Exception as e:
+                        print(f"[red]Error modifying file:[/red] {e}")
+                
+                else:
+                    print(f"[yellow]Unhandled LLM action:[/yellow] {action.get('action')}")
 
                 continue
 
@@ -92,7 +111,9 @@ def interactive_shell(project_path: Optional[str] = None):
 
                 action = interpret_with_llm(user_input)
 
-                if action["action"] == "create_file":
+                if action.get("action") == "unknown":
+                    print("[red]Unknown action from LLM[/red]")
+                elif action["action"] == "create_file":
                     with open(action["file"], "w", encoding="utf-8") as f:
                         f.write(action.get("content", ""))
                     print(f"[green]File created:[/green] {action['file']}")
@@ -106,6 +127,23 @@ def interactive_shell(project_path: Optional[str] = None):
                     import subprocess
                     subprocess.run(action["command"], shell=True)
                     print(f"[green]Command executed:[/green] {action['command']}")
+
+                elif action["action"] == "read_file":
+                    try:
+                        content = Path(action["file"]).read_text(encoding="utf-8")
+                        print(f"\n[cyan]--- {action['file']} ---[/cyan]\n{content}\n")
+                    except Exception as e:
+                        print(f"[red]Error reading file:[/red] {e}")
+
+                elif action["action"] == "modify_file":
+                    try:
+                        Path(action["file"]).write_text(action.get("content", ""), encoding="utf-8")
+                        print(f"[green]File modified:[/green] {action['file']}")
+                    except Exception as e:
+                        print(f"[red]Error modifying file:[/red] {e}")
+                
+                else:
+                    print(f"[yellow]Unhandled LLM action:[/yellow] {action.get('action')}")
 
                 continue
 
@@ -161,8 +199,8 @@ def doctor():
     print(json.dumps(system_info, indent=4))
 
 
-@app.command()
-def run():
+@app.command("exec")
+def exec_cmd():
     """Run a command based on intent."""
 
     user_input = input("Enter your command or intent: ")
@@ -238,6 +276,12 @@ def project(init_path: str = "."):
 # =========================
 # ENTRY POINT
 # =========================
+
+@app.callback(invoke_without_command=True)
+def default_behavior(ctx: typer.Context):
+    """MIOS AI Developer Assistant"""
+    if ctx.invoked_subcommand is None:
+        interactive_shell()
 
 def main():
     app()

@@ -1,6 +1,10 @@
 from typing import List, Dict, Any
 from mios.core.llm_planner import generate_llm_plan
 from mios.memory.error_memory import lookup_error_solution
+import re
+
+
+def extract_missing_package(error_message: str):
     """
     Extracts the missing package name from a ModuleNotFoundError message.
     """
