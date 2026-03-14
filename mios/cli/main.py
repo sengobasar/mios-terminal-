@@ -28,8 +28,8 @@ def interactive_shell():
             break
             
         try:
-            # First try to detect and run Python files in command
-            match = re.search(r"([\w\-]+\.py)", user_input)
+            # Check for explicit run command
+            match = re.search(r"^run\s+([\w\-]+\.py)$", user_input.strip())
             if match:
                 file_name = match.group(1)
                 print(f"[cyan]Running agent on Python file: {file_name}[/cyan]")
