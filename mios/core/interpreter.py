@@ -1,3 +1,6 @@
+import re
+from mios.ai.intent_classifier import classify_intent
+
 def interpret_intent(intent, user_input):
     if intent == "compress_folder":
         return {"command": "tar -czf archive.tar.gz folder"}
@@ -7,3 +10,17 @@ def interpret_intent(intent, user_input):
         return {"action": "explain_command"}
     else:
         return {"error": "Unknown intent"}
+
+def interpret_command(text):
+    intent = classify_intent(text)
+
+    if intent == "run_program":
+        match = re.search(r"(\w+\.py)", text)
+        if match:
+            return {"action": "run_program", "file": match.group(1)}
+    elif intent == "fix_program":
+        match = re.search(r"(\w+\.py)", text)
+        if match:
+            return {"action": "fix_program", "file": match.group(1)}
+
+    return {"action": "unknown"}
