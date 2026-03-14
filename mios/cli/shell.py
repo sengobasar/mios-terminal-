@@ -1,6 +1,7 @@
 import json
 from rich import print
 from mios.core.agent_loop import run_agent
+from mios.core.interpreter import interpret_command
 
 def interactive_shell():
     """
@@ -22,8 +23,17 @@ def interactive_shell():
                 print("[yellow]Please enter a problem or 'exit' to quit.[/yellow]")
                 continue
 
-            print(f"[bold magenta]Agent working on:[/bold magenta] {user_input}")
-            final_state = run_agent(user_input)
+            command = interpret_command(user_input)
+
+            if command["action"] == "run_program":
+                print(f"[bold magenta]Running program:[/bold magenta] {command['file']}")
+                final_state = run_agent(command["file"])
+            elif command["action"] == "fix_program":
+                print(f"[bold magenta]Fixing program:[/bold magenta] {command['file']}")
+                final_state = run_agent(command["file"])
+            else:
+                print(f"[bold magenta]Agent working on:[/bold magenta] {user_input}")
+                final_state = run_agent(user_input)
             
             print("\n[bold green]Agent Run Complete. Final State:[/bold green]")
             print(json.dumps(final_state, indent=4))
