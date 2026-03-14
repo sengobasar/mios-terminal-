@@ -28,9 +28,21 @@ def generate_plan(problem: str) -> List[Dict[str, Any]]:
 
     parsed_error = parse_python_error(problem)
     if parsed_error["type"] == "missing_module":
+        missing_module = parsed_error["module"]
         return [
-            {"action": "install_package", "package": parsed_error["module"]},
-            {"action": "retry_command"}
+            {
+                "action": "edit_file",
+                "file": "current_script",
+                "old_text": missing_module,
+                "new_text": missing_module
+            },
+            {
+                "action": "install_package",
+                "package": missing_module
+            },
+            {
+                "action": "retry_command"
+            }
         ]
     # Fallback for other types of errors or when no specific error is detected
     elif "ModuleNotFoundError" in problem: # Keep original fallback for ModuleNotFoundError if parser fails
