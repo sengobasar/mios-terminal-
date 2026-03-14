@@ -96,6 +96,49 @@ def interactive_shell(project_path: Optional[str] = None):
                         print(f"[green]File modified:[/green] {action['file']}")
                     except Exception as e:
                         print(f"[red]Error modifying file:[/red] {e}")
+
+                elif action["action"] == "search_directory":
+                    query = action.get("query", "").lower()
+                    if query:
+                        print(f"[cyan]Searching for '{query}' in {Path.cwd()} (Fast search)[/cyan]")
+                        matches = []
+                        import os
+                        
+                        # Folders to completely skip to speed up parsing
+                        ignore_dirs = {'.git', 'node_modules', '.venv', 'venv', '__pycache__', 'AppData'}
+                        
+                        try:
+                            # Walk directory explicitly to avoid blocking glob
+                            for root, dirs, files in os.walk(Path.cwd()):
+                                # Prune ignored directories from the search tree
+                                dirs[:] = [d for d in dirs if d not in ignore_dirs]
+                                
+                                # Check directory names
+                                for d in dirs:
+                                    if query in d.lower():
+                                        matches.append(os.path.join(root, d))
+                                        
+                                # Check file names
+                                for f in files:
+                                    if query in f.lower():
+                                        matches.append(os.path.join(root, f))
+                                        
+                                # Stop early if we have enough matches
+                                if len(matches) >= 20:
+                                    break
+                                    
+                        except Exception as e:
+                            print(f"[red]Error during search: {e}[/red]")
+                            
+                        if matches:
+                            for idx, match in enumerate(matches):
+                                print(f"  {idx+1}. {match}")
+                            if len(matches) == 20:
+                                print("  ... and possibly more. (Search capped at 20 results for speed)")
+                        else:
+                            print(f"[yellow]No matches found for '{query}'.[/yellow]")
+                    else:
+                        print("[red]Search query missing from LLM response.[/red]")
                 
                 else:
                     print(f"[yellow]Unhandled LLM action:[/yellow] {action.get('action')}")

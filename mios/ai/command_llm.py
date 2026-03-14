@@ -35,15 +35,21 @@ def interpret_with_llm(command: str) -> Dict[str, Any]:
     1. If the user asks to "open", "read", "show", or "view" a file, the action MUST be "read_file". DO NOT use "create_file" for this.
     2. If the user asks to "create", "make", or "write" a new file, the action is "create_file".
     3. If the user asks to "install", the action is "install_package".
+    4. If the user asks to "search", "find", or "look for" files or folders, the action is "search_directory".
     
     Allowed actions:
-    create_file, modify_file, read_file, run_command, install_package
+    create_file, modify_file, read_file, run_command, install_package, search_directory
     
     Format examples:
     {
         "action": "create_file",
         "file": "filename",
         "content": "file content"
+    }
+    
+    {
+        "action": "search_directory",
+        "query": "folder_or_file_name"
     }
     
     {
