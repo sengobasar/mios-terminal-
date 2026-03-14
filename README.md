@@ -1,739 +1,380 @@
-# MIOS — AI Terminal Copilot
+<div align="center">
+🤖 MIOS — AI Terminal Copilot
+Local-First, Privacy-Focused Command-Line Intelligence
+Show Image
+Show Image
+Show Image
+Show Image
+Show Image
+An experimental AI-powered terminal assistant that interprets natural language and executes developer commands.
+🚀 Quick Start • ✨ What Works Now • 🏗️ Architecture • 📖 Roadmap
+</div>
 
-[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-000000?logo=ai&logoColor=white)]()
-[![Status](https://img.shields.io/badge/Status-v1.0%20Beta-orange)]()
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+💡 What is MIOS?
+MIOS (Machine Intelligence Operating System) is an experimental AI terminal copilot that translates natural language into terminal commands. Think of it as a local ChatGPT for your command line — but everything runs on your machine with complete privacy.
+Example Session:
+bashmios>: create hello.cpp and write hello world program
+✓ File created: hello.cpp
 
-> A local-first, privacy-focused command-line assistant that understands errors, explains solutions, and executes fixes transparently.
+mios>: open hello.cpp
 
----
+--- hello.cpp ---
+#include <iostream>
+int main() {
+    std::cout << "Hello World";
+}
 
-## What MIOS Is
+mios>: edit hello in hello.cpp and change it to hello world
+✓ File modified: hello.cpp
 
-MIOS (Machine Intelligence Operating System) is an **AI-powered terminal copilot** that helps developers:
+🎯 Why MIOS?
+Developer ProblemMIOS SolutionCryptic ErrorsParse → Explain → Suggest fixForgetting SyntaxNatural language → CommandEnvironment IssuesAuto-detect → DiagnoseRepetitive TasksNatural language automation
+Core Philosophy:
+Understand → Explain → Confirm → Execute
+No black boxes. Every action shown. Every command requires approval.
 
-- **Debug errors** by analyzing stack traces and suggesting fixes
-- **Translate natural language** to terminal commands
-- **Diagnose system issues** (CPU, RAM, disk, processes)
-- **Analyze logs** for errors and patterns
-- **Explain commands** before execution
-- **Remember context** across sessions
+✨ What Works Now (v1.0)
+✅ Currently Implemented:
+<table>
+<tr>
+<td width="50%">
+🔧 File Operations
 
-**Core Philosophy:** Diagnose → Explain → Plan → Execute (with confirmation)
+✅ Create files with content
+✅ Modify existing files
+✅ Read file contents
+✅ Natural language editing
 
-**No black boxes.** Every action is transparent. Every command requires approval.
+</td>
+<td width="50%">
+💻 System Operations
 
----
+✅ Run shell commands
+✅ Install Python packages
+✅ System diagnostics (CPU, RAM, disk)
+✅ Environment detection (venv/conda)
 
-## Why MIOS Exists
+</td>
+</tr>
+<tr>
+<td width="50%">
+🐛 Debugging
 
-### Problems Developers Face Daily
+✅ Error parsing
+✅ Error classification
+✅ Fix suggestions
+✅ Auto-retry with fixes
 
-| Problem | MIOS Solution |
-|---------|---------------|
-| **Cryptic errors** (`ModuleNotFoundError`, `PermissionDenied`) | Parse error → explain cause → suggest fix |
-| **Forgetting CLI syntax** (`tar`, `chmod`, `ssh`) | Natural language → terminal command |
-| **Environment hell** (PATH issues, Python versions) | Automatic environment detection |
-| **Build failures** (npm, pip, docker) | Read logs → propose fixes |
-| **System slowness** (high CPU/RAM) | `mios doctor` → diagnose → suggest cleanup |
+</td>
+<td width="50%">
+🧠 AI Features
 
----
+✅ Intent classification
+✅ LLM command interpretation
+✅ Context-aware responses
+✅ Session memory
 
-## Quick Start
+</td>
+</tr>
+</table>
 
-### Installation
+🎯 Core Capabilities
+1️⃣ Natural Language Commands
+bashmios>: create test.txt and write hello world
+✓ File created: test.txt
 
-```bash
-# Install MIOS (future PyPI release)
-pip install git+https://github.com/sengobasar/mios-terminal-.git
+mios>: open test.txt
+--- test.txt ---
+hello world
 
-# Or install from source
-git clone https://github.com/yourusername/mios.git
-cd mios
-pip install -e .
-```
+mios>: install numpy
+✓ Installing numpy...
+✓ Successfully installed numpy-1.24.0
 
-### Prerequisites
+2️⃣ Error Debugging
+bash$ python script.py
+ModuleNotFoundError: No module named 'requests'
 
-**Local LLM** (required for reasoning):
-```bash
-# Install Ollama
-curl https://ollama.ai/install.sh | sh
-
-# Pull a model
-ollama pull phi
-```
-
-### Basic Usage
-
-```bash
-# Debug an error
-mios debug
-
-# System diagnostics
-mios doctor
-
-# Natural language commands
-mios run
-
-# Explain a command
-mios explain "git rebase origin/main"
-
-# Analyze logs
-mios analyze server.log
-```
-
----
-
-## Core Capabilities (v1.0)
-
-### 1. Error Debugging
-
-```bash
 $ mios debug
 
-Paste your error:
-ModuleNotFoundError: No module named 'numpy'
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Analysis
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Error Type: missing_package
-Cause: numpy package not installed in current environment
-
-Plan
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-1. Detect Python environment (venv/conda/system)
-2. Install numpy using appropriate package manager
-3. Verify installation
-
-Suggested Fix
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-pip install numpy
-
-Execute this plan? (y/n):
-```
-
----
-
-### 2. System Diagnostics
-
-```bash
-$ mios doctor
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-System Health Check
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-CPU Usage:        35.2% ✓
-RAM Usage:        62.1% ⚠
-Disk Usage:       71.4% ⚠
-
-Memory: 10.2 GB / 16.0 GB
-Disk:   215 GB / 300 GB
-
-Top Processes by CPU:
-  chrome        12.3%
-  python        8.7%
-  vscode        5.2%
-
-Recommendations:
-  • Close unused browser tabs
-  • Free up disk space (consider cleanup)
-```
-
----
-
-### 3. Natural Language Commands
-
-```bash
-$ mios run
-
-> compress this folder
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Command Translation
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Intent: compress_folder
-
-Command:
-  tar -czf archive.tar.gz folder/
-
-Explanation:
-  Creates compressed archive of folder/
-
-Execute? (y/n):
-```
-
-**More examples:**
-```
-"find files larger than 1GB"  →  find . -size +1G
-"list python files"           →  find . -name "*.py"
-"kill process on port 8000"   →  kill $(lsof -ti:8000)
-```
-
----
-
-### 4. Command Explanation
-
-```bash
-$ mios explain "git rebase origin/main"
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Command Explanation
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Command: git rebase origin/main
-
-What it does:
-  Reapplies your local commits on top of the latest
-  changes from origin/main branch.
-
-⚠ Warning:
-  This rewrites commit history. Do not rebase commits
-  that have been pushed to shared branches.
-
-When to use:
-  • Before creating a pull request
-  • To keep a clean linear history
-  • When working on a feature branch
-
-Alternative:
-  git merge origin/main (preserves history)
-```
-
----
-
-### 5. Log Analysis
-
-```bash
-$ mios analyze server.log
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Log Analysis
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Errors:    2
-Warnings:  5
-Info:      127
-
-Top Errors:
-  DatabaseConnectionError  (line 45)
-  TimeoutError             (line 103)
-
-Patterns Detected:
-  • Database connection timeouts (5x)
-  • Memory warnings increasing over time
-
-Recommendations:
-  1. Check database connection pool settings
-  2. Monitor memory usage trends
-```
-
----
-
-## Mathematical Framework
-
-MIOS is fundamentally a **decision-making agent** that maps observations to actions through learned and rule-based policies.
-
-### 1. Core Agent Model
-
-```
-a = π(U, S, C, T, E)
-```
-
-Where:
-- `U` — User input (error, query, command)
-- `S` — System state (CPU, RAM, processes)
-- `C` — Context memory (previous commands, errors)
-- `T` — Available tools (system_info, executor, analyzer)
-- `E` — Past episodes (successful/failed attempts)
-- `π` — Policy (LLM reasoning + rule-based logic)
-- `a` — Action (command, explanation, plan)
-
----
-
-### 2. Error Classification
-
-Error parsing is a classification function:
-
-```
-f(e) → error_type
-```
-
-**Examples:**
-```
-ModuleNotFoundError    → missing_package
-PermissionDenied       → permission_error
-command not found      → missing_command
-ImportError            → dependency_conflict
-```
-
-Implemented via **regex-based pattern matching** in `debug/error_parser.py`.
-
----
-
-### 3. Intent Detection
-
-Natural language understanding:
-
-```
-intent = g(U)
-```
-
-**Examples:**
-```
-"compress this folder"      → compress_folder
-"find large files"          → find_large_files
-"why is my pc slow"         → system_diagnosis
-"explain git rebase"        → explain_command
-```
-
-Implemented in `ai/intent_classifier.py` using LLM-based classification.
-
----
-
-### 4. Command Translation
-
-Intent to executable command:
-
-```
-cmd = h(intent, U)
-```
-
-**Examples:**
-```
-compress_folder  → tar -czf archive.tar.gz folder/
-find_large_files → find . -size +1G
-system_diagnosis → psutil.cpu_percent(), psutil.virtual_memory()
-```
-
-Implemented in `core/interpreter.py`.
-
----
-
-### 5. Planning Model
-
-Agent generates a sequence of actions:
-
-```
-P = {a₁, a₂, ..., aₙ}
-```
-
-**Example plan for `ModuleNotFoundError`:**
-```
-P = {
-  analyze_error,
-  detect_environment,
-  install_dependency,
-  verify_installation
-}
-```
-
-Each action `aᵢ` is executed sequentially with result evaluation after each step.
-
----
-
-### 6. Tool Selection
-
-Agent chooses the best tool for the task:
-
-```
-tool = argmax_{t ∈ T} score(t | U, S)
-```
-
-**Available tools:**
-- `system_info` — CPU, RAM, disk diagnostics
-- `log_analyzer` — Pattern detection in logs
-- `environment_detector` — Python env detection (venv, conda)
-- `executor` — Safe command execution
-- `file_tools` — File search, analysis
-
-Tool scoring considers:
-- **Relevance** to user query
-- **Safety** (read-only preferred)
-- **Past success rate** (from episode memory)
-
----
-
-### 7. Agent Loop (ReAct Model)
-
-Closed-loop reasoning:
-
-```
-aₜ = π(U, S, C, Hₜ)
-```
-
-Where `Hₜ` is the history of previous actions and results.
-
-**Agent cycle:**
-```
-observe  →  reason  →  act  →  evaluate  →  update memory
-```
-
-Implemented in `core/agent_loop.py` (v3 feature).
-
----
-
-### 8. Task Graph Execution
-
-Plans are represented as directed acyclic graphs:
-
-```
-G = (V, E)
-```
-
-Where:
-- `V` — Tasks (nodes)
-- `E` — Dependencies (edges)
-
-**Example:**
-```
-install_dependency  →  retry_command
-detect_environment  →  install_dependency
-```
-
-A task is **ready** if all dependencies are completed:
-
-```
-ready(v) = deps(v) ⊆ completed
-```
-
----
-
-### 9. Episode Memory
-
-Each problem-solving session is stored as:
-
-```
-E = (U, P, R)
-```
-
-Where:
-- `U` — Problem (error, query)
-- `P` — Plan executed
-- `R` — Result (success/failure)
-
-**Policy improvement:**
-```
-πₙₑw = πₒₗ𝒹 + f(E)
-```
-
-Future versions will use episode memory for **reinforcement-like learning**.
-
----
-
-## System Architecture
-
-```
-┌────────────────────────────────────────────────────────────┐
-│                      User Input (CLI)                       │
-└──────────────────────┬─────────────────────────────────────┘
-                       ↓
-┌──────────────────────────────────────────────────────────┐
-│           Intent Classifier (LLM + Rules)                 │
-│  • debug_error                                            │
-│  • system_diagnosis                                       │
-│  • translate_command                                      │
-│  • explain_command                                        │
-└──────────────────────┬───────────────────────────────────┘
-                       ↓
-┌──────────────────────────────────────────────────────────┐
-│                   Agent Planner                           │
-│  Generates multi-step plan: P = {a₁, a₂, ..., aₙ}        │
-└──────────────────────┬───────────────────────────────────┘
-                       ↓
-┌──────────────────────────────────────────────────────────┐
-│                  Task Graph Scheduler                     │
-│  Enforces dependency order                                │
-└──────────────────────┬───────────────────────────────────┘
-                       ↓
-┌──────────────────────────────────────────────────────────┐
-│                   Tool Executor                           │
-│  • system_info  • log_analyzer  • file_tools              │
-│  • environment_detector  • command_executor               │
-└──────────────────────┬───────────────────────────────────┘
-                       ↓
-┌──────────────────────────────────────────────────────────┐
-│                 Result Evaluator                          │
-│  success? → update memory / retry? → next action         │
-└──────────────────────┬───────────────────────────────────┘
-                       ↓
-┌──────────────────────────────────────────────────────────┐
-│              Context & Episode Memory                     │
-│  • Context: last_error, last_fix, project_type           │
-│  • Episodes: (problem, plan, result) tuples              │
-└──────────────────────────────────────────────────────────┘
-```
-
----
-
-## Project Structure
-
-```
+📊 Error Analysis:
+   Type: missing_package
+   Package: requests
+
+💡 Suggested Fix:
+   pip install requests
+
+Execute? (y/n): y
+✓ Installed requests
+✓ Ready to retry
+Supported Error Types:
+
+ModuleNotFoundError → Auto-install
+ImportError → Dependency resolution
+PermissionDenied → Permission suggestions
+SyntaxError → Code correction hints
+
+
+3️⃣ System Diagnostics
+bash$ mios doctor
+
+🏥 System Health Check
+
+CPU:   35.2% ✓
+RAM:   62.1% ⚠ (10.2 GB / 16.0 GB)
+Disk:  71.4% ⚠ (215 GB / 300 GB)
+
+🔥 Top Processes:
+   chrome    12.3%
+   python     8.7%
+   vscode     5.2%
+
+💡 Recommendations:
+   • Consider closing unused tabs
+   • Free up disk space
+
+🏗️ How It Works
+System Architecture:
+User Input (Natural Language)
+         ↓
+Intent Classifier
+         ↓
+    ┌────┴────┐
+    ↓         ↓
+Rule-Based   LLM
+Interpreter  Fallback
+    ↓         ↓
+    └────┬────┘
+         ↓
+Action Parser (JSON)
+         ↓
+Tool Executor
+         ↓
+System Operation
+         ↓
+User Confirmation
+The Agent Model:
+MIOS works as a decision-making agent:
+action = policy(user_input, system_state, context)
+The policy combines:
+
+Rule-based logic for common commands
+LLM reasoning for complex requests
+Tool execution for system operations
+
+Example Flow:
+python# User: "create hello.py"
+intent = classify("create hello.py")  # → create_file
+↓
+if intent == "create_file":
+    action = {"action": "create_file", "file": "hello.py"}
+else:
+    action = llm_interpret("create hello.py")
+↓
+execute(action)  # Creates the file
+↓
+confirm_with_user()  # Shows what was done
+
+⚡ Quick Start
+📦 Installation
+bash# 1. Install Ollama (for local LLM)
+curl https://ollama.ai/install.sh | sh
+
+# 2. Pull a coding model
+ollama pull deepseek-coder
+
+# 3. Clone MIOS
+git clone https://github.com/sengobasar/mios-terminal-.git
+cd mios-terminal-
+
+# 4. Install
+pip install -e .
+▶️ Usage
+bash# Start interactive shell
+mios
+
+# Or use specific commands
+mios debug        # Debug errors
+mios doctor       # System check
+
+📁 Project Structure
 mios/
 │
 ├── cli/
-│   └── main.py                  # Entry point (Typer CLI)
+│   └── main.py              # CLI entry point
 │
 ├── core/
-│   ├── interpreter.py           # Natural language → command
-│   ├── planner.py               # Multi-step plan generation
-│   ├── executor.py              # Safe command execution
-│   ├── agent_loop.py            # ReAct reasoning loop (v3)
-│   ├── agent_planner.py         # LLM-based planning (v3)
-│   ├── tool_registry.py         # Dynamic tool selection (v3)
-│   ├── task_graph.py            # Dependency scheduler (v3)
-│   └── result_evaluator.py      # Success detection (v3)
-│
-├── debug/
-│   └── error_parser.py          # Regex-based error classification
-│
-├── tools/
-│   ├── system_info.py           # CPU, RAM, disk diagnostics (psutil)
-│   ├── log_analyzer.py          # Pattern detection in logs
-│   ├── environment_detector.py  # Python env detection
-│   ├── file_tools.py            # File search, analysis
-│   └── process_tools.py         # Process management
+│   ├── interpreter.py       # Command interpretation
+│   ├── executor.py          # Tool execution
+│   ├── session.py           # Session management
+│   └── planner.py           # Multi-step planning (v2)
 │
 ├── ai/
-│   ├── intent_classifier.py     # LLM-based intent detection
-│   ├── llm_client.py            # Ollama API wrapper
-│   └── prompt_templates.py      # System prompts for LLM
+│   ├── intent_classifier.py # Intent detection
+│   └── command_llm.py       # LLM integration
 │
-├── memory/
-│   ├── context_store.py         # Session context (JSON)
-│   └── episode_memory.py        # Past executions (SQLite) (v3)
+├── debug/
+│   └── error_parser.py      # Error parsing
 │
-├── config/
-│   └── settings.py              # Configuration
+├── tools/
+│   ├── system_info.py       # System diagnostics
+│   └── file_tools.py        # File operations
 │
-├── utils/
-│   └── helpers.py               # Utility functions
-│
-├── requirements.txt
-└── README.md
-```
+└── requirements.txt
 
----
+🚀 Development Roadmap
+✅ v1.0 — Current Release
+What works:
 
-## Dependencies
+✅ File create/edit/read
+✅ Command execution
+✅ Package installation
+✅ Error debugging
+✅ System diagnostics
+✅ Intent classification
+✅ LLM fallback
 
-```txt
-# Core
-typer>=0.9.0
-rich>=13.0.0
-psutil>=5.9.0
 
-# AI/LLM
-ollama>=0.1.0
+🚧 v2.0 — In Progress
+Goal: Better natural language understanding
+Planned:
 
-# Utilities
-pydantic>=2.0.0
-pathlib>=1.0.0
-```
+🔄 Command explanation (mios explain "git rebase")
+🔄 Log analysis (mios analyze server.log)
+🔄 Multi-turn conversations
+🔄 Command history awareness
+🔄 Project context detection
 
-**Installation:**
-```bash
-pip install -r requirements.txt
-```
 
----
+📋 v3.0 — Future
+Goal: Autonomous multi-step problem solving
+Vision:
 
-## Development Roadmap
+🔮 ReAct-style agent loop
+🔮 Task graph execution
+🔮 Automatic retry with learning
+🔮 Episode memory (remember past fixes)
+🔮 Multi-step planning
 
-### ✅ Version 1.0 (Current) — Error Fixer
-
-**Completed features:**
-- CLI interface (`mios debug`, `mios doctor`)
-- Error parsing and classification
-- System diagnostics (CPU, RAM, disk)
-- Natural language command translation
-- Command explanation
-- Log analysis
-- Environment detection (venv, conda)
-- Context memory
-
----
-
-### 🚧 Version 2.0 (In Progress) — Terminal Copilot
-
-**Goal:** Transform MIOS into a full terminal assistant.
-
-**New features:**
-- Enhanced intent classification
-- Improved natural language understanding
-- Command history integration
-- Project-aware suggestions
-- Interactive multi-turn conversations
-
----
-
-### 📋 Version 3.0 (Planned) — Autonomous Agent
-
-**Goal:** Multi-step autonomous problem-solving.
-
-**New capabilities:**
-- Agent loop with ReAct reasoning
-- Task graph execution with dependencies
-- Dynamic tool selection
-- Result evaluation and retry logic
-- Episode memory for learning
-
-**Example workflow:**
-```
+Example workflow (not yet implemented):
 User: "fix server.py"
 
 Agent:
 1. Run server.py → capture error
-2. Analyze error → missing dependency
-3. Detect environment → venv
-4. Install dependency → pip install flask
-5. Retry server.py → success
-```
+2. Analyze → missing flask
+3. Install → pip install flask
+4. Retry → success
 
----
+🔮 v4.0+ — Long-term Vision
+Goal: Project-wide intelligence
+Ideas:
 
-### 🔮 Version 4.0 (Future) — Project Intelligence
+🌟 Code navigation
+🌟 Project scanning
+🌟 Dependency analysis
+🌟 Test generation
+🌟 Documentation generation
 
-**Goal:** Understand entire codebases.
 
-**Planned features:**
-- Project scanner (AST parsing)
-- Dependency analysis
-- Code navigation
-- Codebase search
-- Safe file system operations
-- Smarter LLM-based planning
+🎯 Technical Details
+Intent Classification
+Common patterns are detected via rules:
 
----
+"create {file}" → create_file
+"install {package}" → install_package
+"run {command}" → run_command
 
-### 🌟 Version 5.0 (Vision) — Devin-Style Agent
+Unknown patterns fall back to LLM interpretation.
+LLM Integration
+LLM generates structured JSON:
+json{
+  "action": "create_file",
+  "file": "hello.py",
+  "content": "print('hello')"
+}
+Allowed actions:
 
-**Goal:** Fully autonomous coding agent.
+create_file
+modify_file
+read_file
+run_command
+install_package
 
-**Capabilities:**
-- Read entire projects
-- Write and modify code
-- Run tests automatically
-- Fix bugs end-to-end
-- Update dependencies
-- Generate documentation
+Error Parsing
+Regex-based classification:
 
-**Agent cycle:**
-```
-observe → reason → act → evaluate → learn
-```
+ModuleNotFoundError: (.+) → Extract package name
+PermissionError → Detect permission issues
+SyntaxError → Code syntax problems
 
----
 
-## Current Limitations
+🔒 Safety & Privacy
+100% Local
 
-This is an honest prototype. Here are the constraints:
+✅ All processing on your machine
+✅ No cloud API calls (except local Ollama)
+✅ No telemetry
+✅ No data collection
 
-### 1. LLM Dependency
-Requires local Ollama installation. **Resolution:** Ship with smaller embedded models in future.
+User Confirmation
 
-### 2. Rule-Based Planning
-Planner uses heuristics, not learned policies. **Resolution:** v3 introduces LLM-based planning.
+✅ Every command requires approval
+✅ Dangerous operations flagged
+✅ Full transparency on actions
 
-### 3. No Multi-Turn Memory
-Each command is independent. **Resolution:** v2 adds conversation history.
 
-### 4. Limited Tool Set
-Only basic system tools. **Resolution:** v4 adds file operations, code analysis.
+⚠️ Current Limitations
+Honest assessment:
 
-### 5. No Learning
-Cannot improve from mistakes yet. **Resolution:** v3 episode memory enables learning.
+LLM Required — Needs Ollama installed locally
+Limited Tools — Only basic file/system operations (v1)
+No Multi-Turn Memory — Each command is independent
+Rule-Based Planning — Not yet fully autonomous
+No Learning — Doesn't improve from past mistakes (yet)
 
----
+These are being addressed in v2 and v3.
 
-## Safety & Privacy
+📦 Dependencies
+bashtyper>=0.9.0      # CLI framework
+rich>=13.0.0      # Terminal formatting
+psutil>=5.9.0     # System info
+ollama>=0.1.0     # Local LLM
+Install all:
+bashpip install -r requirements.txt
 
-### Local-First Architecture
-- **All processing runs locally** — no data sent to cloud
-- LLM runs on your machine via Ollama
-- No telemetry or usage tracking
+🎓 Use Cases
+ScenarioHow MIOS Helps🎓 Learning CLINatural language → commands🐛 DebuggingAuto-parse errors → suggest fixes💼 DevOps TasksAutomate repetitive operations🔬 ResearchQuick system diagnostics
 
-### Command Confirmation
-- **Every action requires approval** before execution
-- Destructive commands are flagged with warnings
-- Safety layer blocks dangerous patterns (`rm -rf /`)
+🤝 Contributing
+This is an active research prototype. Contributions welcome!
+Priority areas:
 
-### Transparent Actions
-- **No black boxes** — every plan is shown before execution
-- Step-by-step explanations
-- Full command visibility
+🔧 New tools (file operations, git commands)
+🎯 Better intent patterns
+🐛 Error pattern improvements
+📝 Documentation
+🧪 Testing
 
----
 
-## Testing
+📚 Inspiration
+This project draws ideas from:
 
-Before using MIOS, run the test suite:
+ReAct (Yao et al., 2022) — Agent reasoning patterns
+Toolformer (Schick et al., 2023) — LLM tool use
+SWE-agent — Autonomous debugging
+Devin — Long-term vision for coding agents
 
-```bash
-# Basic CLI test
-mios --help
 
-# Error debugging
-echo "ModuleNotFoundError: numpy" | mios debug
+📄 License
+MIT License. See LICENSE for details.
 
-# System diagnostics
-mios doctor
 
-# Natural language translation
-echo "compress this folder" | mios run
-
-# Command explanation
-mios explain "git rebase origin/main"
-```
-
----
-
-## Contributing
-
-MIOS is in active development. Contributions welcome!
-
-**Priority areas:**
-- Additional error patterns for `error_parser.py`
-- New system tools in `tools/`
-- Intent classification improvements
-- LLM prompt engineering
-- Testing and bug reports
-
----
-
-## References
-
-This project draws inspiration from:
-
-1. **ReAct: Synergizing Reasoning and Acting in Language Models** (Yao et al., 2022) — Agent loop architecture
-2. **Toolformer: Language Models Can Teach Themselves to Use Tools** (Schick et al., 2023) — Tool selection
-3. **Chain-of-Thought Prompting Elicits Reasoning in Large Language Models** (Wei et al., 2022) — Planning
-4. **Devin: AI Software Engineer** — Vision for autonomous coding agent
-
----
-
-## License
-
-MIT License. See `LICENSE` for details.
-
----
-**Project Goal:** Build a local, transparent, privacy-respecting AI assistant that makes terminal workflows faster and less frustrating for developers.
-
----
 
 <div align="center">
-
-**MIOS — Your local AI terminal copilot**
-
-*Diagnose → Explain → Plan → Execute*
-
+⭐ Star if you find this interesting!
+Show Image
 Made with 🤖 and ☕
 
+MIOS — Your Local AI Terminal Copilot
+Understand → Explain → Confirm → Execute
 </div>
