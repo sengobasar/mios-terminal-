@@ -124,8 +124,8 @@ def interactive_shell(project_path: Optional[str] = None):
 # =========================
 
 @app.command()
-def mios(project: Optional[str] = typer.Argument(None)):
-    """Start MIOS interactive shell."""
+def run(project: Optional[str] = typer.Argument(".")):
+    """Start MIOS interactive shell for the current project."""
     interactive_shell(project_path=project)
 
 
