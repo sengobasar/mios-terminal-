@@ -8,6 +8,7 @@ from mios.core.observer import observe
 from mios.tools.project_state import build_world_state
 from mios.core.tool_registry import get_tools # Keeping existing import, though not directly used in this loop example yet.
 from mios.tools.run_program import run_python_file # Import the new function
+from mios.tools.project_analyzer import analyze_project
 
 
 def run_agent(problem: str, max_iterations: int = 5) -> Dict[str, Any]:
