@@ -77,7 +77,10 @@ def run_agent(problem: str, max_iterations: int = 5) -> Dict[str, Any]:
         # 2. Generate Plan
         # The `problem` variable here is either the original string (if not a .py file),
         # or the error message from a failed script execution or failed action.
-        plan = generate_plan(problem)
+        print("[blue]Analyzing project context...[/blue]")
+        project_context = analyze_project()
+        
+        plan = generate_plan(problem, project_context)
         
         if not plan:
             print("[yellow]No further plan generated. Assuming goal satisfied or stuck.[/yellow]")
