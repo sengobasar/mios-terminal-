@@ -1,4 +1,5 @@
 import typer
+import re
 from rich import print
 from rich.prompt import Prompt
 from mios.tools.system_info import get_system_info
@@ -26,10 +27,12 @@ def interactive_shell():
             break
             
         try:
-            # First try to run as a direct command
-            if ".py" in user_input:
-                print(f"[cyan]Running agent on Python file: {user_input}[/cyan]")
-                run_agent(user_input)
+            # First try to detect and run Python files in command
+            match = re.search(r"([\w\-]+\.py)", user_input)
+            if match:
+                file_name = match.group(1)
+                print(f"[cyan]Running agent on Python file: {file_name}[/cyan]")
+                run_agent(file_name)
                 continue
                 
             intent_data = classify_intent(user_input)
