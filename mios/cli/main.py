@@ -58,46 +58,38 @@ def interactive_shell(project_path: Optional[str] = None):
                 continue
 
             intent_data = classify_intent(user_input)
+            intent = intent_data.get("intent", "unknown")
 
-            # LLM fallback
-            if intent_data["intent"] == "unknown":
-
+            # If intent is unknown use LLM interpreter
+            if intent == "unknown":
                 print("[yellow]Using LLM interpreter...[/yellow]")
 
                 action = interpret_with_llm(user_input)
 
                 if action["action"] == "create_file":
-
                     with open(action["file"], "w", encoding="utf-8") as f:
                         f.write(action.get("content", ""))
-
                     print(f"[green]File created:[/green] {action['file']}")
 
                 elif action["action"] == "install_package":
-
                     import subprocess
                     subprocess.run(["pip", "install", action["package"]])
-
                     print(f"[green]Package installed:[/green] {action['package']}")
 
                 elif action["action"] == "run_command":
-
                     import subprocess
                     subprocess.run(action["command"], shell=True)
-
                     print(f"[green]Command executed:[/green] {action['command']}")
 
                 continue
 
-            action = interpret_intent(intent_data["intent"], user_input)
+            # Otherwise use normal intent system
+            action = interpret_intent(intent, user_input)
 
             if "command" in action or "action" in action:
-
                 print(f"[blue]Executing: {action.get('command', action.get('action'))}[/blue]")
                 run_action(action)
-
             else:
-
                 print(f"[cyan]Agent response: {action}[/cyan]")
 
         except Exception as e:
