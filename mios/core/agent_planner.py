@@ -1,9 +1,6 @@
-import re
 from typing import List, Dict, Any
-from mios.tools.error_parser import parse_python_error
+from mios.core.llm_planner import generate_llm_plan
 from mios.memory.error_memory import lookup_error_solution
-
-def _extract_package_name_from_error(error_message: str) -> str | None:
     """
     Extracts the missing package name from a ModuleNotFoundError message.
     """
@@ -12,47 +9,16 @@ def _extract_package_name_from_error(error_message: str) -> str | None:
         return match.group(1)
     return None
 
-def generate_plan(problem: str) -> List[Dict[str, Any]]:
+def generate_plan(problem: str, file_path: str = None) -> List[Dict[str, Any]]:
     """
-    Generates a plan based on the problem description.
-    Each step in the plan is a dictionary representing an action and its parameters.
+    Generates a repair plan for the given problem.
+    First checks memory for known solutions, then uses LLM planning if no match found.
     """
-    plan: List[Dict[str, Any]] = []
-    
     solution = lookup_error_solution(problem)
     if solution:
         return [
             {"action": "run_command", "command": solution},
             {"action": "retry_command"}
         ]
-
-    parsed_error = parse_python_error(problem)
-    if parsed_error["type"] == "missing_module":
-        missing_module = parsed_error["module"]
-        return [
-            {
-                "action": "edit_file",
-                "file": "current_script",
-                "old_text": missing_module,
-                "new_text": missing_module
-            },
-            {
-                "action": "install_package",
-                "package": missing_module
-            },
-            {
-                "action": "retry_command"
-            }
-        ]
-    # Fallback for other types of errors or when no specific error is detected
-    elif "ModuleNotFoundError" in problem: # Keep original fallback for ModuleNotFoundError if parser fails
-        package_name = _extract_package_name_from_error(problem)
-        if package_name:
-            return [
-                {"action": "install_package", "package": package_name},
-                {"action": "retry_command"}
-            ]
     
-    # Default plan if no specific error is handled
-    plan.append({"action": "analyze_problem", "problem_description": problem})
-    return plan
+    return generate_llm_plan(problem, file_path)
