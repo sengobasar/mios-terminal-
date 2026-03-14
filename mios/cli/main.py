@@ -11,6 +11,7 @@ from mios.core.executor import run_action
 
 from mios.core.interpreter import interpret_intent
 from mios.ai.intent_classifier import classify_intent
+from mios.ai.command_llm import interpret_with_llm
 from mios.core.agent_loop import run_agent
 
 app = typer.Typer()
@@ -38,7 +39,9 @@ def interactive_shell():
             intent_data = classify_intent(user_input)
             
             if intent_data["intent"] == "unknown":
-                print(f"[yellow]Unable to determine intent for: {user_input}[/yellow]")
+                print("[yellow]Using LLM interpreter...[/yellow]")
+                action = interpret_with_llm(user_input)
+                print(action)
                 continue
                 
             action = interpret_intent(intent_data["intent"], user_input)
