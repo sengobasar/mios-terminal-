@@ -1,6 +1,7 @@
 import re
 from typing import List, Dict, Any
 from mios.tools.error_parser import parse_python_error
+from mios.memory.error_memory import lookup_error_solution
 
 def _extract_package_name_from_error(error_message: str) -> str | None:
     """
@@ -17,6 +18,13 @@ def generate_plan(problem: str) -> List[Dict[str, Any]]:
     Each step in the plan is a dictionary representing an action and its parameters.
     """
     plan: List[Dict[str, Any]] = []
+    
+    solution = lookup_error_solution(problem)
+    if solution:
+        return [
+            {"action": "run_command", "command": solution},
+            {"action": "retry_command"}
+        ]
 
     parsed_error = parse_python_error(problem)
     if parsed_error["type"] == "missing_module":
