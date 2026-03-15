@@ -21,6 +21,7 @@
 
 ## 💡 **What is MIOS?**
 
+
 **MIOS (Machine Intelligence Operating System)** is an experimental AI terminal copilot that translates natural language into terminal commands. Think of it as a **local ChatGPT for your command line** — but everything runs on your machine with complete privacy.
 
 ### **Example Session:**
